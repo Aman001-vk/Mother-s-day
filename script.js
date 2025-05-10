@@ -1,4 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Background music functionality
+    const backgroundMusic = document.getElementById('background-music');
+    
+    // Function to unmute and play music
+    function playMusic() {
+        backgroundMusic.muted = false;
+        backgroundMusic.play()
+            .then(() => {
+                console.log("Music playing successfully");
+            })
+            .catch(error => {
+                console.log("Playback failed:", error);
+                // If autoplay fails, show a play button
+                showPlayButton();
+            });
+    }
+
+    // Show play button if autoplay fails
+    function showPlayButton() {
+        const playButton = document.createElement('button');
+        playButton.innerHTML = '🎵 Play Music';
+        playButton.className = 'play-music-button';
+        playButton.onclick = function() {
+            playMusic();
+            this.remove();
+        };
+        document.body.appendChild(playButton);
+    }
+
+    // Try to play music immediately
+    playMusic();
+
+    // Also try to play on any user interaction
+    document.addEventListener('click', playMusic);
+    document.addEventListener('touchstart', playMusic);
+
     // Image slider functionality
     const images = document.querySelectorAll('.image-slider img');
     let currentImageIndex = 0;
@@ -11,49 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Change image every 5 seconds
     setInterval(showNextImage, 5000);
-
-    // Background music functionality
-    const backgroundMusic = document.getElementById('background-music');
-    
-    // Try to play music automatically
-    function tryAutoplay() {
-        backgroundMusic.play()
-            .then(() => {
-                console.log("Autoplay successful");
-            })
-            .catch(error => {
-                console.log("Autoplay failed:", error);
-                // If autoplay fails, show a play button
-                showPlayButton();
-            });
-    }
-
-    // Show play button if autoplay fails
-    function showPlayButton() {
-        const playButton = document.createElement('button');
-        playButton.innerHTML = '🎵 Play Music';
-        playButton.className = 'play-music-button';
-        playButton.onclick = function() {
-            backgroundMusic.play();
-            this.remove();
-        };
-        document.body.appendChild(playButton);
-    }
-
-    // Try to play music when the page loads
-    tryAutoplay();
-
-    // Also try to play on any user interaction
-    document.addEventListener('click', function() {
-        if (backgroundMusic.paused) {
-            backgroundMusic.play();
-        }
-    });
-    document.addEventListener('touchstart', function() {
-        if (backgroundMusic.paused) {
-            backgroundMusic.play();
-        }
-    });
 
     // Scroll Animation Functionality
     const observerOptions = {
