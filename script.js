@@ -15,19 +15,45 @@ document.addEventListener('DOMContentLoaded', function() {
     // Background music functionality
     const backgroundMusic = document.getElementById('background-music');
     
-    // Function to play music when user interacts with the page
-    function playBackgroundMusic() {
-        backgroundMusic.play().catch(function(error) {
-            console.log("Audio playback failed:", error);
-        });
-        // Remove the event listeners after first interaction
-        document.removeEventListener('click', playBackgroundMusic);
-        document.removeEventListener('touchstart', playBackgroundMusic);
+    // Try to play music automatically
+    function tryAutoplay() {
+        backgroundMusic.play()
+            .then(() => {
+                console.log("Autoplay successful");
+            })
+            .catch(error => {
+                console.log("Autoplay failed:", error);
+                // If autoplay fails, show a play button
+                showPlayButton();
+            });
     }
 
-    // Add event listeners for user interaction
-    document.addEventListener('click', playBackgroundMusic);
-    document.addEventListener('touchstart', playBackgroundMusic);
+    // Show play button if autoplay fails
+    function showPlayButton() {
+        const playButton = document.createElement('button');
+        playButton.innerHTML = '🎵 Play Music';
+        playButton.className = 'play-music-button';
+        playButton.onclick = function() {
+            backgroundMusic.play();
+            this.remove();
+        };
+        document.body.appendChild(playButton);
+    }
+
+    // Try to play music when the page loads
+    tryAutoplay();
+
+    // Also try to play on any user interaction
+    document.addEventListener('click', function() {
+        if (backgroundMusic.paused) {
+            backgroundMusic.play();
+        }
+    });
+    document.addEventListener('touchstart', function() {
+        if (backgroundMusic.paused) {
+            backgroundMusic.play();
+        }
+    });
 
     // Scroll Animation Functionality
     const observerOptions = {
