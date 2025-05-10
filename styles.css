@@ -245,7 +245,8 @@ header .subtitle {
         opacity: 1;
         transform: translateX(0);
     }
-} 
+}
+
 .play-music-button {
     position: fixed;
     bottom: 20px;
